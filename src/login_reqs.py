@@ -17,7 +17,10 @@ class LoginRequests:
          
 
     def send_login(self, password, proxy = None) -> None:
-        time.sleep(random.uniform(0.5, 3.5))  
+        if not proxy:
+            time.sleep(random.uniform(0.7, 4.7)) 
+        else:
+            time.sleep(random.uniform(0.5,3.5)) 
         # intercepted login endpoint payload
         payload = { 
         "username": self.username, 
@@ -25,6 +28,7 @@ class LoginRequests:
         "domain": "flash", 
         "df": "8aebf98697464e47fd10b2e0849b3a105597f2599b03c4f8af6bcdc3dda40eca" # intercepted df value. This can stay the same for all requests.
         } 
+
         
         max_retries = 3
         for attempt in range(max_retries):
@@ -43,6 +47,7 @@ class LoginRequests:
                         print(response.text[:500])
                     input()
                 elif response.status_code == 401:
+                    print(Fore.RED + f'Invalid username or password')
                     return
                 elif response.status_code == 502:
                     
