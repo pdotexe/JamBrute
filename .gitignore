@@ -37,10 +37,6 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# Project specific
-txt/proxies.txt
-txt/rockyou.txt
-*.log
 
 # Sensitive data (if any)
 .env
