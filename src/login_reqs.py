@@ -2,13 +2,15 @@ import time
 import random
 import requests
 from colorama import Fore
-from src.workercontrol import Threading  
+from src.workercontrol import Threading 
+from src.cli import parse_arguments
 
 class LoginRequests:
     
    
     def __init__(self):
-         self.username = input(Fore.CYAN + "Enter player username: ") 
+         args = parse_arguments()
+         self.username = args.username
          self.uri = "https://authenticator.animaljam.com/authenticate" 
          self.threading = Threading()
          self.print_lock = self.threading.print_lock
@@ -18,9 +20,9 @@ class LoginRequests:
 
     def send_login(self, password, proxy = None) -> None:
         if not proxy:
-            time.sleep(random.uniform(0.7, 4.7)) 
+            time.sleep(random.uniform(1.5, 4.7)) 
         else:
-            time.sleep(random.uniform(0.5,3.5)) 
+            time.sleep(random.uniform(1,3.5)) 
         # intercepted login endpoint payload
         payload = { 
         "username": self.username, 

@@ -15,5 +15,5 @@ class Threading:
         with self.print_lock:
             print(Fore.YELLOW + f"All workers paused for a few seconds...")
         self.pause_event.set()
-        time.sleep(6.7)
+        time.sleep(6.7) #xd
         self.pause_event.clear()

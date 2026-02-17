@@ -5,15 +5,14 @@ from colorama import Fore
 
 
 class ProxyLoader:
-
-    
-    def __init__(self):
+    def __init__(self, proxy_file: str = None):
         self.proxy_list: list[str] = []
         self.test = "http://httpbin.org/status/200" # proxy test endpoint
+        self.proxy_file = proxy_file or "txt/proxies.txt"
     
     def load_proxies(self) -> list[str]:
         try:   
-            with open("txt/proxies.txt", 'r') as p: 
+            with open(self.proxy_file, 'r') as p: 
                 for l in p:
                     proxy = l.strip() # strip whitespace
                     if proxy:
