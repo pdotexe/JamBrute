@@ -34,31 +34,41 @@ class LoginRequests:
 
         content_length = len(body)
 
+        # rand cookies
+        cookie = f"GA1.2"
+
         # user agent detection
 
-        def os_token():
+        def os_token() -> str :
             system = platform.system()
             if system == "Windows":
                 return "Windows NT 10.0; Win64; x64"
             if system == "Darwin":
                 ver = platform.mac_ver()[0].replace(".", "_")
+            else:
+                ver = "14_5_0"
                 return f"Macintosh; Intel Mac OS X {ver}"
-            return "X11; Linux x86_64"
+            return "X11; Linux x86_64" #unlikely, but a fall back user agent
         
         #recraft into the user-agent template
         UA = (
-        f"Mozilla/5.0 ({os_token()}) AppleWebKit/537.36 (KHTML, like Gecko) "
-        "ajdr/0.0.6999 Chrome/87.0.4280.141 Electron/11.5.0 Safari/537.36"
+        f"Mozilla/5.0 ({os_token()}) AppleWebKit/537.36 (KHTML, like Gecko) 
+        AJClassic/1.5.7 Chrome/87.0.4280.141 Electron/11.5.0 Safari/537.36"
         )
-
+        
         # endpoint headers
         headers = {
-        "sec-fetch-site": "none",
-        "sec-fetch-mode": "no-cors",
-        "sec-fetch-dest": "empty",
+        "content-length": content_length,
         "user-agent": UA,
+        "content-type": "application/json"
+        "accept": "*/*"
+        "sec-fetch-site": "cross-site",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-dest": "empty",
         "accept-encoding": "gzip, deflate, br",
         "accept-language": "en-US",
+        "cookie": "_ga=GA1.2.764210468.1765840055",
+        "cookie": "_ga_377QC1616V=GS2.2.s1771889586$o2$g0$t1771889586$j60$l0$h0" # google analytics cookie fields. Can stay static for all reqs.
     }
         # intercepted login endpoint payload
         payload = { 
