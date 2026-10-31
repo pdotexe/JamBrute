@@ -3,7 +3,7 @@
 
 # About
 ## -----------------
-JamBrute is a Proof-of-Concept (PoC) bruteforce utility built for Animal Jam Classic. It is designed utilizing the python requests and threading library against the authentication endpoint of the server to automate login attempts with wordlist of commonly used passwords.
+FastBullet is a minimalistic credential testing utility for authentication endpoints. It is designed utilizing the python requests and threading library against the authentication endpoint of any server to automate login attempts with user provided wordlist of commonly used passwords.
 
 
 
@@ -11,7 +11,7 @@ JamBrute is a Proof-of-Concept (PoC) bruteforce utility built for Animal Jam Cla
 ## -----------------
 - Proxy support
 - Configurable thread-count
-- Large default wordlist
+- Great for testing weak or newly-created auth endpoints.
 
 
 
@@ -20,8 +20,8 @@ JamBrute is a Proof-of-Concept (PoC) bruteforce utility built for Animal Jam Cla
 
 Clone repository and install dependencies:
 ```
-git clone jambrute.git
-cd jambrute
+git clone fastbullet.git
+cd fastbullet
 pip install -r requirements.txt
 
 ```
@@ -39,5 +39,5 @@ python start.py -p <proxy file> -w <wordlist file> -u <username> -t <thread coun
 ## ------------------
 
 * This utility is not intended for malicious use. 
-* It is highly impractical to not use proxies, as the server implements rate-limits per IP address and may return a HTTP 502 server error.
-* Do not use too many threads at once, as this may exhaust memory.
+* It is highly impractical to not use proxies, as servers implement IP or device fingerprint based ratelimits.
+* Do not use too many threads at once, as this may exhaust memory. Python's GIL is also not the best Mutex, so be mindful of thread counts.

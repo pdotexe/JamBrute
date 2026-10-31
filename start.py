@@ -8,6 +8,7 @@ from src.login_reqs import LoginRequests
 from src.wordlist import Wordlist
 from src.proxyloader import ProxyLoader
 from src.cli import parse_arguments
+import random
 
 
 
@@ -21,7 +22,7 @@ def start() -> None:
         raise ValueError("Thread count too high")
     
     # ascii banner
-    text = "JamBrute"
+    text = "FastBullet"
     ascii_art = pyfiglet.figlet_format(text, font="standard", width = 150)
     print(colored(ascii_art, 'red'))
 
@@ -33,19 +34,16 @@ def start() -> None:
     pxy = proxy_list.load_proxies() 
     wordlist.open_wordlist()
     
-    
-    count = 0
-    length = len(pxy)
+  
     # execute threads
     
     with ThreadPoolExecutor(max_workers = args.threads) as worker:
-        for password in wordlist.passwords: #iterate through the wordlist array of passwords
-            if pxy or length > 0:
-                proxy = pxy[count % length]
+        
+        if pxy:
+            proxy = random.choice(pxy)
             else:
-                proxy = None
+            proxy = None
             worker.submit(login.send_login, password, proxy) # submit the threads to executor with login method and password + proxy parameters
-            count += 1
         worker.shutdown(wait=True)
 
 

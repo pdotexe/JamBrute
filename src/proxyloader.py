@@ -30,8 +30,8 @@ class ProxyLoader:
                             if not proxy.startswith("socks5://") and not proxy.startswith("http://") and not proxy.startswith("https://"):
                                 proxy = f"socks5://{proxy}"
                             elif not protocol_substring in proxy:
-                                raise ValueError("Incorrect format")
-                            elif self.check_ip(proxy):
+                                raise ValueError("Incorrect format (Add '://')")
+                            elif check_ip(proxy):
                                 continue
                             else:
                                 print(Fore.RED + f'Proxy {proxy} is not a valid proxy protocol, skipping.')
