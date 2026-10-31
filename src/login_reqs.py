@@ -44,7 +44,7 @@ class LoginRequests:
                 self.pause_event.wait(timeout=0.1)
             proxies = {"http": proxy, "https": proxy} if proxy else None
             try: # send requests 
-                response = requests.post(self.uri, json=payload, headers=self.headers, proxies=proxies, timeout=2.0, verify=False)
+                response = requests.post(self.uri, json=payload, headers=self.headers, proxies=proxies, timeout=2.0, impersonate="chrome")
                 with self.print_lock:
                     print(Fore.BLUE + f'Trying password: "{password}" response code: {response.status_code}')
 
